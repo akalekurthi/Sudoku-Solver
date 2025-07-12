@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sudoku Solver</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .sudoku-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+            background: #333;
+            border: 3px solid #333;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 30px 0;
+        }
+
+        .row {
+            display: flex;
+            gap: 1px;
+        }
+
+        .cell {
+            background: white;
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .cell input {
+            width: 100%;
+            height: 100%;
+            border: none;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #333;
+            background: transparent;
+            outline: none;
+        }
+
+        .cell input:focus {
+            background: #e3f2fd;
+        }
+
+        .cell.solved {
+            background: #e8f5e8;
+        }
+
+        .cell.solved input {
+            color: #2e7d32;
+            font-weight: bold;
+        }
+
+        /* 3x3 box borders */
+        .cell:nth-child(3n) {
+            border-right: 2px solid #333;
+        }
+
+        .cell:nth-child(9n) {
+            border-right: none;
+        }
+
+        .row:nth-child(3n) {
+            border-bottom: 2px solid #333;
+        }
+
+        .row:nth-child(9n) {
+            border-bottom: none;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 30px 0;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #333;
+            border: 2px solid #dee2e6;
+        }
+
+        .btn-secondary:hover {
+            background: #e9ecef;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 107, 107, 0.3);
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .stats {
+            text-align: center;
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            color: #666;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        /* Dark theme */
+        body.dark {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+        }
+
+        body.dark .container {
+            background: #2c3e50;
+            color: white;
+        }
+
+        body.dark .header h1 {
+            background: linear-gradient(135deg, #3498db, #9b59b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        body.dark .header p {
+            color: #bdc3c7;
+        }
+
+        body.dark .cell {
+            background: #34495e;
+        }
+
+        body.dark .cell input {
+            color: white;
+            background: #34495e;
+        }
+
+        body.dark .cell input:focus {
+            background: #2c3e50;
+        }
+
+        body.dark .cell.solved {
+            background: #27ae60;
+        }
+
+        body.dark .cell.solved input {
+            color: white;
+        }
+
+        body.dark .btn-secondary {
+            background: #34495e;
+            color: white;
+            border-color: #2c3e50;
+        }
+
+        body.dark .btn-secondary:hover {
+            background: #2c3e50;
+        }
+
+        body.dark .stats {
+            background: #34495e;
+            color: #bdc3c7;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+    
+    <div class="container">
+        <div class="header">
+            <h1>🧩 Sudoku Solver</h1>
+            <p>Enter your puzzle and let the algorithm solve it!</p>
+        </div>
+
+        <!-- Success Message -->
+        <div th:if="${solved}" class="message success">
+            ✅ Puzzle solved successfully!
+            <div th:if="${solveTime}" class="stats">
+                ⏱️ Solved in <span th:text="${solveTime}">0</span>ms
+            </div>
+        </div>
+
+        <!-- Error Message -->
+        <div th:if="${error}" class="message error">
+            ❌ <span th:text="${errorMessage}">Error message</span>
+        </div>
+
+        <form th:action="@{/solve}" method="post">
+            <div class="sudoku-grid">
+                <div th:each="row, rowStat : ${board}" class="row">
+                    <div th:each="cell, colStat : ${row}" class="cell" 
+                         th:classappend="${solved ? 'solved' : ''}">
+                        <input type="text" 
+                               th:name="board" 
+                               th:value="${cell != 0 ? cell : ''}"
+                               maxlength="1" 
+                               pattern="[1-9]"
+                               th:readonly="${solved}"
+                               oninput="this.value = this.value.replace(/[^1-9]/g, '')"
+                               placeholder="">
+                    </div>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button type="submit" class="btn btn-primary" th:disabled="${solved}">
+                    🚀 Solve Puzzle
+                </button>
+                <a href="/sample" class="btn btn-secondary">📝 Load Sample</a>
+                <a href="/clear" class="btn btn-danger">🗑️ Clear Board</a>
+            </div>
+        </form>
+
+        <div class="stats">
+            <p>💡 Enter numbers 1-9 in the grid above, then click "Solve Puzzle"</p>
+            <p>🎯 The algorithm uses backtracking to find the solution</p>
+        </div>
+    </div>
+
+    <script>
+        function toggleTheme() {
+            const body = document.body;
+            const themeToggle = document.querySelector('.theme-toggle');
+            
+            if (body.classList.contains('dark')) {
+                body.classList.remove('dark');
+                themeToggle.textContent = '🌙';
+            } else {
+                body.classList.add('dark');
+                themeToggle.textContent = '☀️';
+            }
+        }
+
+        // Auto-focus first empty cell
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputs = document.querySelectorAll('.sudoku-grid input');
+            inputs.forEach(input => {
+                if (input.value === '') {
+                    input.focus();
+                    return;
+                }
+            });
+        });
+
+        // Handle keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            const inputs = Array.from(document.querySelectorAll('.sudoku-grid input'));
+            const currentIndex = inputs.indexOf(document.activeElement);
+            
+            if (currentIndex === -1) return;
+            
+            let nextIndex = currentIndex;
+            
+            switch(e.key) {
+                case 'ArrowUp':
+                    nextIndex = currentIndex - 9;
+                    break;
+                case 'ArrowDown':
+                    nextIndex = currentIndex + 9;
+                    break;
+                case 'ArrowLeft':
+                    nextIndex = currentIndex - 1;
+                    break;
+                case 'ArrowRight':
+                    nextIndex = currentIndex + 1;
+                    break;
+                default:
+                    return;
+            }
+            
+            if (nextIndex >= 0 && nextIndex < inputs.length) {
+                e.preventDefault();
+                inputs[nextIndex].focus();
+            }
+        });
+    </script>
+</body>
+</html> 
