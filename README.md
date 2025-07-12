@@ -1,18 +1,18 @@
-# 🧩 Sudoku Solver Web Application
+#  Sudoku Solver Web Application
 
 A modern, responsive web application built with Spring Boot and Thymeleaf that solves Sudoku puzzles using a backtracking algorithm.
 
-## ✨ Features
+##  Features
 
-- **🎯 Intelligent Solver**: Uses backtracking algorithm to solve any valid 9x9 Sudoku puzzle
-- **🎨 Modern UI**: Beautiful, responsive design with dark/light theme toggle
-- **📱 Mobile Friendly**: Optimized for all device sizes
-- **⚡ Real-time Feedback**: Shows solve time and success/error messages
-- **🎮 Interactive**: Keyboard navigation and auto-focus
-- **📝 Sample Puzzles**: Pre-loaded sample puzzles for testing
-- **🔄 Reset/Clear**: Easy board clearing and reset functionality
+- ** Intelligent Solver**: Uses backtracking algorithm to solve any valid 9x9 Sudoku puzzle
+- ** Modern UI**: Beautiful, responsive design with dark/light theme toggle
+- ** Mobile Friendly**: Optimized for all device sizes
+- ** Real-time Feedback**: Shows solve time and success/error messages
+- ** Interactive**: Keyboard navigation and auto-focus
+- ** Sample Puzzles**: Pre-loaded sample puzzles for testing
+- ** Reset/Clear**: Easy board clearing and reset functionality
 
-## 🏗️ Architecture
+##  Architecture
 
 ### MVC Pattern
 - **Model**: `SudokuSolverService` - Business logic and algorithm
@@ -25,7 +25,7 @@ A modern, responsive web application built with Spring Boot and Thymeleaf that s
 - **Algorithm**: Backtracking with recursion
 - **Build Tool**: Maven
 
-## 🚀 Quick Start
+##  Quick Start
 
 ### Prerequisites
 - Java 17 or higher
@@ -52,7 +52,7 @@ A modern, responsive web application built with Spring Boot and Thymeleaf that s
 4. **Access the application**
    Open your browser and navigate to: `http://localhost:8080`
 
-## 🎮 How to Use
+##  How to Use
 
 1. **Enter a Puzzle**: 
    - Click on any cell in the 9x9 grid
@@ -60,16 +60,16 @@ A modern, responsive web application built with Spring Boot and Thymeleaf that s
    - Use arrow keys to navigate between cells
 
 2. **Solve the Puzzle**:
-   - Click "🚀 Solve Puzzle" button
+   - Click "Solve Puzzle" button
    - The algorithm will find the solution
    - Solved cells will be highlighted in green
 
 3. **Additional Features**:
-   - **📝 Load Sample**: Load a pre-configured puzzle
-   - **🗑️ Clear Board**: Reset the entire grid
-   - **🌙 Theme Toggle**: Switch between light and dark themes
+   - ** Load Sample**: Load a pre-configured puzzle
+   - ** Clear Board**: Reset the entire grid
+   - ** Theme Toggle**: Switch between light and dark themes
 
-## 🧠 Algorithm Details
+##  Algorithm Details
 
 ### Backtracking Implementation
 The solver uses a classic backtracking algorithm:
@@ -88,7 +88,7 @@ The solver uses a classic backtracking algorithm:
 - **Average Case**: Much faster due to constraint propagation
 - **Space Complexity**: O(n²) for the recursion stack
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 sudoku-solver/
@@ -109,7 +109,7 @@ sudoku-solver/
 └── README.md                                    # This file
 ```
 
-## 🧪 Testing
+##  Testing
 
 ### Manual Testing
 1. **Valid Puzzle**: Enter a solvable Sudoku puzzle
@@ -122,7 +122,7 @@ sudoku-solver/
 mvn test
 ```
 
-## 🎨 UI Features
+##  UI Features
 
 ### Responsive Design
 - **Desktop**: Full-featured interface with hover effects
@@ -141,7 +141,7 @@ mvn test
 - **Visual Feedback**: Clear success/error messages
 - **Loading States**: Disabled buttons during solving
 
-## 🔧 Configuration
+##  Configuration
 
 ### Application Properties
 ```properties
@@ -161,7 +161,7 @@ logging.level.com.example.sudoku=DEBUG
 - **Theme Colors**: Update CSS variables in `index.html`
 - **Port**: Change `server.port` in `application.properties`
 
-## 🚀 Deployment
+##  Deployment
 
 ### Local Development
 ```bash
@@ -182,7 +182,7 @@ EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "/app.jar"]
 ```
 
-## 🤝 Contributing
+##  Contributing
 
 1. Fork the repository
 2. Create a feature branch
@@ -190,11 +190,11 @@ ENTRYPOINT ["java", "-jar", "/app.jar"]
 4. Add tests if applicable
 5. Submit a pull request
 
-## 📝 License
+##  License
 
 This project is open source and available under the [MIT License](LICENSE).
 
-## 🎯 Future Enhancements
+##  Future Enhancements
 
 - [ ] **REST API**: Convert to REST endpoints for frontend separation
 - [ ] **React Frontend**: Modern React-based UI
@@ -205,24 +205,14 @@ This project is open source and available under the [MIT License](LICENSE).
 - [ ] **Export**: Download solved puzzles as PDF/TXT
 - [ ] **Multi-language**: Internationalization support
 
-## 📊 Performance Metrics
+##  Performance Metrics
 
 - **Solve Time**: Typically < 100ms for standard puzzles
 - **Memory Usage**: Minimal due to in-place solving
 - **Scalability**: Handles multiple concurrent users
 - **Browser Compatibility**: Modern browsers (Chrome, Firefox, Safari, Edge)
 
-## 🐛 Known Issues
+##  Known Issues
 
 - None currently identified
 
-## 📞 Support
-
-For questions or issues:
-1. Check the [Issues](issues) page
-2. Create a new issue with detailed description
-3. Include browser version and steps to reproduce
-
----
-
-**Built with ❤️ using Spring Boot and Thymeleaf** 
